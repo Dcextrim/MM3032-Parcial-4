@@ -1,0 +1,76 @@
+════════════════════════════════════════════════════════════════════════
+ESTRUCTURA CON CARPETAS - Múltiples Máquinas de Turing
+════════════════════════════════════════════════════════════════════════
+
+📁 NUEVA ESTRUCTURA:
+
+MM3032-Parcial-4/
+├── maquina_turing.py     # Código fuente
+├── parser_mt.py
+├── sim_mt.py
+├── sim_mt_pdf.py
+├── verificar.py          # Script de verificación
+│
+├── MT1/                  # Máquina de Turing #1
+│   ├── mt_acepta.txt
+│   ├── mt_rechaza.txt
+│   ├── mt_infinito.txt
+│   ├── mt_diagrama.dot
+│   ├── salida_acepta.txt    (generada)
+│   ├── salida_rechaza.txt   (generada)
+│   └── salida_infinito.txt  (generada)
+│
+├── MT2/                  # Puedes crear más MTs
+│   └── ...
+│
+└── README.md
+
+
+🚀 CÓMO USAR:
+
+1. Ejecutar MT1 (ejemplos incluidos):
+   python sim_mt_pdf.py MT1/mt_acepta.txt -o MT1/salida_acepta.txt --conf "u q v"
+   python sim_mt_pdf.py MT1/mt_rechaza.txt -o MT1/salida_rechaza.txt --conf "u q v"
+   python sim_mt_pdf.py MT1/mt_infinito.txt -o MT1/salida_infinito.txt --conf "u q v" --max-steps 200
+
+2. Verificar todo automáticamente:
+   python verificar.py
+
+3. Crear una nueva MT (por ejemplo, MT2):
+   - Crea la carpeta: mkdir MT2
+   - Crea tu especificación: MT2/mi_mt.txt
+   - Ejecuta: python sim_mt_pdf.py MT2/mi_mt.txt -o MT2/salida.txt --conf "u q v"
+
+
+✨ VENTAJAS DE ESTA ESTRUCTURA:
+
+✓ Organización clara: Cada MT en su propia carpeta
+✓ Fácil comparación: Puedes tener MT1/, MT2/, MT3/, etc.
+✓ Salidas separadas: Cada MT tiene sus propias salidas
+✓ Escalable: Agrega más MTs sin ensuciar el directorio raíz
+✓ Código reutilizable: Los mismos .py funcionan para todas las MTs
+
+
+📋 VERIFICACIÓN:
+
+Ejecuta: python verificar.py
+
+Resultado esperado:
+  ✓ PASS - Caso de ACEPTACIÓN (input=1) - MT1
+  ✓ PASS - Caso de RECHAZO (input=01) - MT1
+  ✓ PASS - Caso INFINITO (input=00, max 200 pasos) - MT1
+  
+  Resultado final: 3/3 pruebas pasaron
+
+
+💡 TIPS:
+
+- Mantén las especificaciones en sus carpetas (MT1/, MT2/, etc.)
+- Las salidas también se guardan en las carpetas correspondientes
+- El código fuente (.py) queda en la raíz para reutilización
+- Puedes crear tantas carpetas MT como necesites
+
+
+════════════════════════════════════════════════════════════════════════
+¡Ahora puedes probar diferentes Máquinas de Turing de forma organizada!
+════════════════════════════════════════════════════════════════════════

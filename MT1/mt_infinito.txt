@@ -1,0 +1,24 @@
+
+# Especificación de MT (basada en el PDF de clase)
+Q = {q0, q1, qacc, qrej, qinf}
+Sigma = {0,1}
+Gamma = {0,1,⊔}
+blank = ⊔
+q0 = q0
+qaccept = qacc
+qreject = qrej
+
+delta:
+(q0, 1) -> (qacc, 1, R)
+(q0, 0) -> (q1, 0, R)
+(q0, ⊔) -> (qrej, ⊔, R)
+
+(q1, 0) -> (qinf, 0, R)
+(q1, 1) -> (qrej, 1, R)
+(q1, ⊔) -> (qrej, ⊔, R)
+
+(qinf, 0) -> (qinf, 0, R)
+(qinf, 1) -> (qinf, 1, R)
+(qinf, ⊔) -> (qinf, ⊔, R)
+
+input = 00

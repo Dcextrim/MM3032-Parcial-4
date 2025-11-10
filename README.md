@@ -1,249 +1,338 @@
-# Simulador de Máquina de Turing Determinista (MM3032 - Parcial 4)
+# Simulador de Máquina de Turing Determinista
+## MM3032 - Lógica Matemática - Parcial 4
 
-## Estructura del proyecto
+---
+
+## 📋 **Descripción del Proyecto**
+
+Simulador completo de Máquina de Turing Determinista que sigue exactamente la notación vista en clase. El proyecto incluye múltiples máquinas de ejemplo, desde casos simples hasta algoritmos complejos como verificadores de palíndromos.
+
+---
+
+## 🗂️ **Estructura del Proyecto**
 
 ```
 MM3032-Parcial-4/
-├── maquina_turing.py    # Clase MaquinaTuring (lógica de simulación)
-├── parser_mt.py         # Parser de especificaciones
-├── sim_mt.py            # Programa principal con CLI
-├── sim_mt_pdf.py        # Menú interactivo
 │
-├── MT1/                 # Máquinas de Turing simples
-│   ├── mt_acepta.txt    # Caso que acepta (input = 1)
-│   ├── mt_rechaza.txt   # Caso que rechaza (input = 01)
-│   ├── mt_infinito.txt  # Caso infinito (input = 00)
-│   └── mt_diagrama.dot  # Diagrama de estados
+├── maquina_turing.py      # Clase principal MaquinaTuring
+├── parser_mt.py           # Parser de especificaciones
+├── sim_mt.py              # Interfaz CLI
+├── sim_mt_pdf.py          # Menú interactivo
 │
-└── MT2/                 # Máquinas de Turing complejas
-    ├── mt_suma.txt              # Suma en unario (111#11 → 11111)
-    ├── mt_suma.dot
-    ├── mt_palindromo.txt        # Verificador de palíndromos (acepta)
-    ├── mt_palindromo.dot
-    ├── mt_palindromo_rechaza.txt # Verificador de palíndromos (rechaza)
-    ├── mt_palindromo_rechaza.dot
-    ├── mt_mult2.txt             # Multiplicación por 2 en binario
-    └── mt_mult2.dot
+├── MT1/                   # Máquinas simples
+│   ├── mt_acepta.txt
+│   ├── mt_rechaza.txt
+│   ├── mt_infinito.txt
+│   └── mt_diagrama.dot
+│
+└── MT2/                   # Máquinas complejas
+    ├── mt_suma.txt
+    ├── mt_palindromo.txt
+    ├── mt_palindromo_rechaza.txt
+    ├── mt_palindromo_infinito.txt
+    ├── mt_mult2.txt
+    └── *.dot (diagramas)
 ```
 
-## Contenido del proyecto
+---
 
-**CÓDIGO FUENTE (4 archivos):**
-- `maquina_turing.py` — Clase MaquinaTuring con la lógica de simulación
-- `parser_mt.py` — Parser de archivos de especificación
-- `sim_mt.py` — Programa principal con interfaz CLI
-- `sim_mt_pdf.py` — Menú interactivo para ejecutar MTs
+## 🚀 **Uso**
 
-**MT1/ - Máquinas Simples (3 MTs):**
-- `mt_acepta.txt` — Acepta '1'
-- `mt_rechaza.txt` — Rechaza '01'
-- `mt_infinito.txt` — Bucle infinito con '00'
-- `mt_diagrama.dot` — Diagrama de estados
-
-**MT2/ - Máquinas Complejas (4 MTs):**
-- `mt_suma.txt` + `mt_suma.dot` — Suma en unario (111#11 → 11111)
-- `mt_palindromo.txt` + `mt_palindromo.dot` — Verifica palíndromos (aba)
-- `mt_palindromo_rechaza.txt` + `mt_palindromo_rechaza.dot` — Rechaza no-palíndromos (abb)
-- `mt_mult2.txt` + `mt_mult2.dot` — Multiplica por 2 en binario (101 → 1010)
-
-**SALIDAS:** Los archivos `salida_*.txt` se generan automáticamente al ejecutar las máquinas
-
-## Marco teórico
-
-Este simulador implementa una Máquina de Turing determinista según la notación de clase:
-- M = (Q, Σ, Γ, δ, q0, q_accept, q_reject)
-- Σ ⊆ Γ, ⊔ ∈ Γ y ⊔ ∉ Σ (⊔ es el blanco)
-- δ: Q × Γ → Q × Γ × {L, R} (movimientos: L=izquierda, R=derecha)
-- Configuración: u q v (q incrustado; la cabeza lee el primer símbolo de v)
-- Cinta con tope a la izquierda (índice 0); si δ indica L en posición 0, la cabeza NO se mueve
-- Por la derecha, la cinta se extiende infinitamente con blancos
-
-## Descripción de las MTs implementadas
-
-### MT1 - Máquina simple de clasificación
-Acepta cadenas que empiezan con '1', rechaza cadenas que empiezan con '01' o '⊔', 
-y entra en bucle infinito si empiezan con '00'.
-
-**Estados:** Q = {q0, q1, qacc, qrej, qinf}  
-**Alfabeto de entrada:** Σ = {0, 1}  
-**Alfabeto de cinta:** Γ = {0, 1, ⊔}
-
-**Transiciones:**
-- (q0, 1) → (qacc, 1, R)  — acepta si primer símbolo es 1
-- (q0, 0) → (q1, 0, R)    — lee 0, va a q1
-- (q0, ⊔) → (qrej, ⊔, R)  — rechaza cadena vacía
-- (q1, 0) → (qinf, 0, R)  — segundo 0: entra a bucle
-- (q1, 1) → (qrej, 1, R)  — segundo 1: rechaza
-- (q1, ⊔) → (qrej, ⊔, R)  — solo un 0: rechaza
-- (qinf, *) → (qinf, *, R) — bucle infinito para cualquier símbolo
-
-### MT2 - Máquinas complejas
-
-**1. Suma en unario** (`mt_suma.txt`)
-- Entrada: `1^n#1^m` → Salida: `1^(n+m)`
-- Ejemplo: `111#11` → `11111` (3 + 2 = 5)
-- Estados: 6, Transiciones: 10, Pasos: ~15
-
-**2. Verificador de palíndromos** (`mt_palindromo.txt`, `mt_palindromo_rechaza.txt`)
-- Entrada: cadenas en `{a,b}*`
-- Acepta si w = w^R (palíndromo)
-- Ejemplos: `aba` ✓, `abba` ✓, `abb` ✗
-- Estados: 8, Transiciones: 24, Pasos: ~12
-
-**3. Multiplicación por 2** (`mt_mult2.txt`)
-- Entrada: número binario
-- Salida: número × 2 (shift left + añadir 0)
-- Ejemplo: `101` → `1010` (5 × 2 = 10)
-- Estados: 6, Transiciones: 13, Pasos: ~16
-
-Ver `MT2/README.md` para detalles completos de cada máquina.
-
-## Cómo ejecutar
-
-### Requisitos
-- Python 3.x (sin dependencias externas)
-
-### Opción 1: Menú interactivo (recomendado)
-
+### **Opción 1: Menú Interactivo**
 ```bash
 python sim_mt_pdf.py
 ```
+Muestra un menú con todas las máquinas disponibles en `MT1/` y `MT2/`.
 
-Muestra un menú con todas las máquinas disponibles. Selecciona el número y automáticamente:
-- Ejecuta la máquina
-- Genera el archivo de salida `salida_*.txt`
-- Genera el diagrama `.dot`
-
-### Opción 2: Línea de comandos
-
-**Sintaxis:**
+### **Opción 2: Línea de Comandos**
 ```bash
-python sim_mt.py <especificacion.txt> -o <salida.txt> [--dot <diagrama.dot>] [--max-steps N]
+python sim_mt.py <archivo.txt> [-o salida.txt] [--max-steps N] [--dot]
 ```
 
 **Ejemplos:**
 ```bash
-# MT1
-python sim_mt.py MT1/mt_acepta.txt -o MT1/salida_acepta.txt --dot MT1/mt_diagrama.dot
-python sim_mt.py MT1/mt_infinito.txt -o MT1/salida_infinito.txt --max-steps 200
+# Ejecutar palíndromo y guardar salida
+python sim_mt.py MT2/mt_palindromo.txt -o salida.txt
 
-# MT2
-python sim_mt.py MT2/mt_suma.txt -o MT2/salida_suma.txt --dot MT2/mt_suma.dot
-python sim_mt.py MT2/mt_palindromo.txt -o MT2/salida_palindromo.txt --dot MT2/mt_palindromo.dot
+# Con límite de pasos y generar diagrama
+python sim_mt.py MT2/mt_suma.txt --max-steps 100 --dot
+
+# Ver ayuda
+python sim_mt.py --help
 ```
 
-### Opciones del simulador
+**Símbolos de resultado:**
+- `[OK]` → Aceptado
+- `[X]` → Rechazado  
+- `[LOOP]` → Ciclo infinito detectado
+
+---
+
+## 📦 **Módulos del Proyecto**
+
+### **1. `maquina_turing.py`** - Simulador Core
+
+Implementa la clase `MaquinaTuring` con:
+
+```python
+class MaquinaTuring:
+    def __init__(self, Q, Sigma, Gamma, delta, q0, qaccept, qreject, blank='⊔')
+    def validate()              # Verifica definición correcta
+    def simulate(w, max_steps)  # Ejecuta la máquina
+    def to_dot()                # Genera diagrama Graphviz
+```
+
+**Características clave:**
+- Cinta infinita implementada con `defaultdict(lambda: blank)`
+- Cabezal inicia en posición 0 (`left_boundary`)
+- Si intenta moverse L desde posición 0, se queda ahí (tope izquierdo)
+- Configuraciones en formato `u q v`:
+  - `u` = contenido antes del cabezal
+  - `q` = estado actual
+  - `v` = contenido desde cabezal hacia derecha
+
+### **2. `parser_mt.py`** - Parser de Especificaciones
+
+Lee archivos `.txt` con formato:
 
 ```
-Uso: python sim_mt_pdf.py SPEC.txt -o SALIDA.txt [opciones]
-
-Opciones:
-  -o, --out ARCHIVO       Archivo de salida (requerido)
-  --conf FORMATO          Formato de configuración: "u q v" (con espacios) o "uqv" (compacto)
-                          Por defecto: "u q v"
-  --max-steps N           Límite de pasos (útil para evitar bucles infinitos)
-  --allow-S               Permitir movimiento S (quedarse) - variante extendida
-  --no-implicit-reject    No rechazar implícitamente cuando δ no está definida
-```
-
-## Formato del archivo de especificación
-
-```
-# Comentarios comienzan con #
-Q = {q0, q1, qacc, qrej, qinf}
-Sigma = {0,1}
-Gamma = {0,1,⊔}
+Q = {q0, q1, q2, qacc, qrej}
+Sigma = {a, b}
+Gamma = {a, b, X, ⊔}
 blank = ⊔
 q0 = q0
 qaccept = qacc
 qreject = qrej
 
 delta:
-(q0, 1) -> (qacc, 1, R)
-(q0, 0) -> (q1, 0, R)
-...
+(q0, a) -> (q1, X, R)
+(q1, b) -> (q2, b, L)
 
-input = 00
+input = aabba
 ```
 
-### Validaciones automáticas
-- q0, qaccept, qreject ∈ Q
-- Σ ⊆ Γ
-- blank ∈ Γ y blank ∉ Σ
-- Determinismo de δ (una única regla por (q, a))
-- Símbolos y estados en δ deben existir en Γ y Q
+### **3. `sim_mt.py`** - CLI
 
-### Comportamiento en ejecución
-- Si no hay transición δ(q, a) definida, el simulador envía a qreject (rechazo implícito)
-- La ejecución para al llegar a qaccept o qreject
-- Con --max-steps N, se detiene después de N pasos y muestra un aviso
+Interfaz de línea de comandos con opciones:
+- `-o FILE`: Guardar configuraciones en archivo
+- `--max-steps N`: Límite de pasos (detecta ciclos)
+- `--dot`: Generar diagrama automáticamente
 
-## Generar diagramas visuales
+### **4. `sim_mt_pdf.py`** - Menú Interactivo
 
-Para generar una imagen PNG del diagrama de estados (requiere Graphviz):
+Sistema de menú que:
+- Auto-descubre todas las MTs en `MT1/` y `MT2/`
+- Ejecuta máquinas con un solo clic
+- Genera diagramas automáticamente
+- Filtra warnings de encoding
+
+---
+
+## 🔄 **Máquina Destacada: Verificador de Palíndromos**
+
+### **Algoritmo**
+
+El verificador de palíndromos (`mt_palindromo.txt`) usa la estrategia de **"pelar desde los extremos"**:
+
+**Estados:**
+```
+Q = {q0, q_busca_a, q_busca_b, q_ret_a, q_ret_b, q_verif, qacc, qrej}
+```
+
+**Alfabeto de cinta:**
+```
+Σ = {a, b}          # Entrada
+Γ = {a, b, X, ⊔}    # Cinta (X = marcador)
+```
+
+### **Funcionamiento Paso a Paso**
+
+#### **1. Marcar extremo izquierdo**
+```
+q0:
+  - Lee 'a' → Marca con X, va a q_busca_a (recordando que era 'a')
+  - Lee 'b' → Marca con X, va a q_busca_b (recordando que era 'b')
+  - Lee 'X' → Salta (ya verificado)
+  - Lee '⊔' → Todo verificado → ACEPTA ✓
+```
+
+#### **2. Buscar extremo derecho**
+```
+q_busca_a / q_busca_b:
+  - Avanzan → hasta encontrar '⊔'
+  - Retroceden ← un paso para leer último símbolo
+```
+
+#### **3. Verificar coincidencia**
+```
+Si venimos de q_busca_a:
+  - Último debe ser 'a' → Marca con X, va a q_ret_a ✓
+  - Si es 'b' o 'X' → RECHAZA ✗
+
+Si venimos de q_busca_b:
+  - Último debe ser 'b' → Marca con X, va a q_ret_b ✓
+  - Si es 'a' o 'X' → RECHAZA ✗
+```
+
+#### **4. Regresar al inicio**
+```
+q_ret_a / q_ret_b:
+  - Se mueven ← (izquierda)
+  - Pasan sobre 'a', 'b', 'X'
+  - Al encontrar '⊔' → Vuelven a q0 para siguiente iteración
+```
+
+### **Ejemplo: Verificación de "aba"**
+
+```
+Paso  Configuración          Estado       Acción
+──────────────────────────────────────────────────────────────
+  1    q0 aba                q0           Lee 'a', marca X
+  2   X q_busca_a ba         q_busca_a    Avanza →
+  3   Xb q_busca_a a         q_busca_a    Avanza →
+  4   Xba q_busca_a ⊔        q_busca_a    Encuentra fin
+  5   Xb q_busca_a a         q_busca_a    Retrocede ←
+  6   X q_ret_a bX           q_ret_a      Lee 'a', marca X ✓
+  7    q_ret_a XbX           q_ret_a      Retrocede ←
+  8    q0 XbX                q0           Nueva iteración
+  9   X q0 bX                q0           Salta X
+ 10   Xb q0 X                q0           Salta X
+ 11   XbX q0 ⊔               q0           Solo X → ACEPTA ✓
+```
+
+**Resultado:** `aba` es palíndromo → **ACEPTADO [OK]**
+
+### **¿Por Qué Funciona?**
+
+1. ✅ **"Pela" la cadena** desde extremos hacia el centro
+2. ✅ **Cada iteración** verifica que primer y último símbolo coincidan
+3. ✅ **Símbolos verificados** se marcan con X (no se revisan dos veces)
+4. ✅ **Si solo quedan X** → es palíndromo → ACEPTA
+5. ✅ **Si algún par difiere** → NO es palíndromo → RECHAZA
+
+### **Casos de Prueba**
+
+| Archivo                        | Input  | Resultado | Descripción |
+|--------------------------------|--------|-----------|-------------|
+| `mt_palindromo.txt`            | `aba`  | `[OK]`    | Palíndromo válido |
+| `mt_palindromo_rechaza.txt`    | `abb`  | `[X]`     | No es palíndromo |
+| `mt_palindromo_infinito.txt`   | `aaa`  | `[LOOP]`  | Transición faltante → ciclo |
+
+---
+
+## 🎯 **Otras Máquinas Incluidas**
+
+### **MT1/ - Máquinas Simples**
+
+| Archivo           | Descripción                    | Input | Resultado |
+|-------------------|--------------------------------|-------|-----------|
+| `mt_acepta.txt`   | Acepta cadena "1"              | `1`   | `[OK]`    |
+| `mt_rechaza.txt`  | Rechaza "01"                   | `01`  | `[X]`     |
+| `mt_infinito.txt` | Ciclo infinito con "00"        | `00`  | `[LOOP]`  |
+
+### **MT2/ - Máquinas Complejas**
+
+| Archivo       | Descripción                           | Ejemplo Input | Output |
+|---------------|---------------------------------------|---------------|--------|
+| `mt_suma.txt` | Suma en unario: `111#11` → `11111`   | `111#11`      | `11111` |
+| `mt_mult2.txt`| Multiplicación ×2 en binario          | `101`         | `1010` |
+
+---
+
+## 📊 **Generación de Diagramas**
+
+Los diagramas se generan automáticamente en formato **Graphviz DOT**:
 
 ```bash
-# MT1
-dot -Tpng MT1/mt_diagrama.dot -o MT1/mt_diagrama.png
-
-# MT2
-dot -Tpng MT2/mt_suma.dot -o MT2/mt_suma.png
-dot -Tpng MT2/mt_palindromo.dot -o MT2/mt_palindromo.png
-dot -Tpng MT2/mt_mult2.dot -o MT2/mt_mult2.png
+python sim_mt.py MT2/mt_palindromo.txt --dot
 ```
 
-Los diagramas muestran solo los estados que realmente tienen transiciones (sin estados sueltos).
+Esto crea `MT2/mt_palindromo_diagrama.dot` que puedes visualizar con:
+- [Graphviz Online](https://dreampuf.github.io/GraphvizOnline/)
+- Graphviz local: `dot -Tpng diagrama.dot -o diagrama.png`
 
-## Verificación de resultados
+**Características:**
+- ✅ Solo muestra estados **realmente usados** en las transiciones
+- ✅ Estados de aceptación con **doble círculo**
+- ✅ Estados de rechazo con **color rojo**
+- ✅ Transiciones etiquetadas con `a/b,M`
 
-### MT1 - Casos simples
+---
 
-**Caso de aceptación** (mt_acepta.txt con input = 1)
+## 🔧 **Formato de Especificación**
+
 ```
- q0 1
-1 qacc ⊔
+# Comentarios empiezan con #
+
+Q = {estado1, estado2, ...}
+Sigma = {símbolo1, símbolo2, ...}
+Gamma = {símbolo1, símbolo2, ..., ⊔}
+blank = ⊔
+q0 = estado_inicial
+qaccept = estado_aceptacion
+qreject = estado_rechazo
+
+delta:
+(estado_origen, símbolo_leído) -> (estado_destino, símbolo_escrito, Movimiento)
+# Movimiento: L (izquierda) o R (derecha)
+
+input = palabra_de_entrada
 ```
-**Resultado: ACEPTADO** ✓
 
-**Caso de rechazo** (mt_rechaza.txt con input = 01)
+---
+
+## ✅ **Validaciones**
+
+El simulador verifica automáticamente:
+- ✓ `q0 ∈ Q`
+- ✓ `qacc, qrej ∈ Q` y `qacc ≠ qrej`
+- ✓ `Σ ⊆ Γ`
+- ✓ `blank ∈ Γ` y `blank ∉ Σ`
+- ✓ Todas las transiciones usan estados y símbolos definidos
+- ✓ Movimientos válidos: solo L o R
+
+---
+
+## 🎓 **Notación de Clase**
+
+El simulador respeta exactamente la notación vista en clase:
+
+**Definición formal:**
 ```
- q0 01
-0 q1 1
-01 qrej ⊔
+M = (Q, Σ, Γ, δ, q0, qacc, qrej)
 ```
-**Resultado: RECHAZADO** ✓
 
-**Caso infinito** (mt_infinito.txt con input = 00)
+**Configuración:**
 ```
- q0 00
-0 q1 0
-00 qinf ⊔
-00⊔ qinf ⊔
-00⊔⊔ qinf ⊔
-...
-[Aviso] Se alcanzó el límite de pasos (200). Posible ciclo infinito.
+u q v
 ```
-**Resultado: CICLO INFINITO** ✓
+Donde:
+- `u` = contenido de la cinta antes del cabezal
+- `q` = estado actual
+- `v` = contenido desde el cabezal (inclusive) hacia la derecha
 
-### MT2 - Casos complejos
+**Función de transición:**
+```
+δ: Q × Γ → Q × Γ × {L, R}
+```
 
-Ver archivos `MT2/salida_*.txt` para las trazas completas de ejecución.
+---
 
-**Suma:** 111#11 → 11111 (15 pasos)  
-**Palíndromo acepta:** aba → ACEPTA (12 pasos)  
-**Palíndromo rechaza:** abb → RECHAZA (6 pasos)  
-**Multiplicación x2:** 101 → 1010 (16 pasos)
+## 📝 **Requisitos**
 
-## Notación de configuraciones
+- Python 3.7+
+- Solo librerías estándar (no requiere instalación adicional)
 
-Formato `u q v`:
-- `u` = contenido de la cinta a la izquierda de la cabeza
-- `q` = estado actual (incrustado)
-- `v` = contenido desde la posición de la cabeza hacia la derecha
+---
 
-La cabeza siempre lee el **primer símbolo de v**.
+## 👨‍💻 **Autor**
 
-Ejemplo: `01 q2 10⊔` significa:
-- Cinta: ...⊔010⊔...
-- Estado: q2
-- Cabeza en posición 2 (leyendo '1')
+Daniel Chet  
+Universidad del Valle de Guatemala  
+MM3032 - Lógica Matemática - Semestre 6
+
+---
+
+## 📄 **Licencia**
+
+Proyecto académico - MM3032 Parcial 4

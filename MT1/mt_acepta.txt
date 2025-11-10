@@ -1,5 +1,5 @@
 
-# Especificación de MT (basada en el PDF de clase)
+# Especificación de MT
 Q = {q0, q1, qacc, qrej, qinf}
 Sigma = {0,1}
 Gamma = {0,1,⊔}

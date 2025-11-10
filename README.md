@@ -7,44 +7,32 @@ MM3032-Parcial-4/
 ├── maquina_turing.py    # Clase MaquinaTuring (lógica de simulación)
 ├── parser_mt.py         # Parser de especificaciones
 ├── sim_mt.py            # Programa principal con CLI
-├── sim_mt_pdf.py        # Wrapper de compatibilidad
-├── verificar.py         # Script de pruebas automáticas
+├── sim_mt_pdf.py        # Menú interactivo
 │
 ├── MT1/                 # Máquinas de Turing simples
 │   ├── mt_acepta.txt    # Caso que acepta (input = 1)
 │   ├── mt_rechaza.txt   # Caso que rechaza (input = 01)
 │   ├── mt_infinito.txt  # Caso infinito (input = 00)
-│   ├── mt_diagrama.dot  # Diagrama de estados
-│   ├── salida_acepta.txt
-│   ├── salida_rechaza.txt
-│   └── salida_infinito.txt
+│   └── mt_diagrama.dot  # Diagrama de estados
 │
-├── MT2/                 # Máquinas de Turing complejas
-│   ├── mt_suma.txt              # Suma en unario (111#11 → 11111)
-│   ├── mt_palindromo.txt        # Verificador de palíndromos (acepta)
-│   ├── mt_palindromo_rechaza.txt # Verificador de palíndromos (rechaza)
-│   ├── mt_mult2.txt             # Multiplicación por 2 en binario
-│   ├── mt_suma.dot
-│   ├── mt_palindromo.dot
-│   ├── mt_palindromo_rechaza.dot
-│   ├── mt_mult2.dot
-│   ├── salida_suma.txt
-│   ├── salida_palindromo_acepta.txt
-│   ├── salida_palindromo_rechaza.txt
-│   ├── salida_mult2.txt
-│   └── README.md        # Documentación específica de MT2
-│
-└── README.md            # Este archivo
+└── MT2/                 # Máquinas de Turing complejas
+    ├── mt_suma.txt              # Suma en unario (111#11 → 11111)
+    ├── mt_suma.dot
+    ├── mt_palindromo.txt        # Verificador de palíndromos (acepta)
+    ├── mt_palindromo.dot
+    ├── mt_palindromo_rechaza.txt # Verificador de palíndromos (rechaza)
+    ├── mt_palindromo_rechaza.dot
+    ├── mt_mult2.txt             # Multiplicación por 2 en binario
+    └── mt_mult2.dot
 ```
 
 ## Contenido del proyecto
 
-**CÓDIGO FUENTE (5 archivos):**
+**CÓDIGO FUENTE (4 archivos):**
 - `maquina_turing.py` — Clase MaquinaTuring con la lógica de simulación
 - `parser_mt.py` — Parser de archivos de especificación
 - `sim_mt.py` — Programa principal con interfaz CLI
-- `sim_mt_pdf.py` — Wrapper para compatibilidad
-- `verificar.py` — Script de pruebas automáticas para MT1
+- `sim_mt_pdf.py` — Menú interactivo para ejecutar MTs
 
 **MT1/ - Máquinas Simples (3 MTs):**
 - `mt_acepta.txt` — Acepta '1'
@@ -53,14 +41,12 @@ MM3032-Parcial-4/
 - `mt_diagrama.dot` — Diagrama de estados
 
 **MT2/ - Máquinas Complejas (4 MTs):**
-- `mt_suma.txt` — Suma en unario (111#11 → 11111)
-- `mt_palindromo.txt` — Verifica palíndromos (aba ✓)
-- `mt_palindromo_rechaza.txt` — Rechaza no-palíndromos (abb ✗)
-- `mt_mult2.txt` — Multiplica por 2 en binario (101 → 1010)
-- 4 archivos `.dot` con sus diagramas
-- Ver `MT2/README.md` para detalles
+- `mt_suma.txt` + `mt_suma.dot` — Suma en unario (111#11 → 11111)
+- `mt_palindromo.txt` + `mt_palindromo.dot` — Verifica palíndromos (aba)
+- `mt_palindromo_rechaza.txt` + `mt_palindromo_rechaza.dot` — Rechaza no-palíndromos (abb)
+- `mt_mult2.txt` + `mt_mult2.dot` — Multiplica por 2 en binario (101 → 1010)
 
-**SALIDAS:** Archivos `salida_*.txt` generados automáticamente en MT1/ y MT2/
+**SALIDAS:** Los archivos `salida_*.txt` se generan automáticamente al ejecutar las máquinas
 
 ## Marco teórico
 
@@ -117,42 +103,33 @@ Ver `MT2/README.md` para detalles completos de cada máquina.
 ### Requisitos
 - Python 3.x (sin dependencias externas)
 
-### Comandos básicos
+### Opción 1: Menú interactivo (recomendado)
 
-**MT1 - Máquinas simples:**
 ```bash
-# Caso de aceptación (input = 1)
-python sim_mt_pdf.py MT1/mt_acepta.txt -o MT1/salida_acepta.txt
-
-# Caso de rechazo (input = 01)
-python sim_mt_pdf.py MT1/mt_rechaza.txt -o MT1/salida_rechaza.txt
-
-# Caso infinito (input = 00, limitado a 200 pasos)
-python sim_mt_pdf.py MT1/mt_infinito.txt -o MT1/salida_infinito.txt --max-steps 200
+python sim_mt_pdf.py
 ```
 
-**MT2 - Máquinas complejas:**
+Muestra un menú con todas las máquinas disponibles. Selecciona el número y automáticamente:
+- Ejecuta la máquina
+- Genera el archivo de salida `salida_*.txt`
+- Genera el diagrama `.dot`
+
+### Opción 2: Línea de comandos
+
+**Sintaxis:**
 ```bash
-# Suma en unario: 111#11 → 11111
-python sim_mt_pdf.py MT2/mt_suma.txt -o MT2/salida_suma.txt
-
-# Verificador de palíndromos
-python sim_mt_pdf.py MT2/mt_palindromo.txt -o MT2/salida_palindromo_acepta.txt
-python sim_mt_pdf.py MT2/mt_palindromo_rechaza.txt -o MT2/salida_palindromo_rechaza.txt
-
-# Multiplicación por 2 en binario: 101 → 1010
-python sim_mt_pdf.py MT2/mt_mult2.txt -o MT2/salida_mult2.txt
+python sim_mt.py <especificacion.txt> -o <salida.txt> [--dot <diagrama.dot>] [--max-steps N]
 ```
 
-**Generar diagramas .dot:**
+**Ejemplos:**
 ```bash
-python sim_mt_pdf.py MT1/mt_acepta.txt --dot MT1/mt_diagrama.dot -o MT1/salida.txt
-python sim_mt_pdf.py MT2/mt_suma.txt --dot MT2/mt_suma.dot -o MT2/salida.txt
-```
+# MT1
+python sim_mt.py MT1/mt_acepta.txt -o MT1/salida_acepta.txt --dot MT1/mt_diagrama.dot
+python sim_mt.py MT1/mt_infinito.txt -o MT1/salida_infinito.txt --max-steps 200
 
-**Verificación automática (MT1):**
-```bash
-python verificar.py
+# MT2
+python sim_mt.py MT2/mt_suma.txt -o MT2/salida_suma.txt --dot MT2/mt_suma.dot
+python sim_mt.py MT2/mt_palindromo.txt -o MT2/salida_palindromo.txt --dot MT2/mt_palindromo.dot
 ```
 
 ### Opciones del simulador

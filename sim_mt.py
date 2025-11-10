@@ -2,13 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 Simulador de Máquina de Turing Determinista - Programa principal
-MM3032 - Lógica Matemática - Parcial 4
-
-Uso:
-    python sim_mt.py SPEC.txt -o SALIDA.txt [opciones]
-
-Ejemplo:
-    python sim_mt.py mt_acepta.txt -o salida_acepta.txt --conf "u q v"
 """
 
 import argparse
@@ -132,13 +125,13 @@ Formato de especificación:
         
         if mt.qacc in ultima_config:
             resultado = "ACEPTADO"
-            simbolo = "✓"
+            simbolo = "[OK]"
         elif mt.qrej in ultima_config:
             resultado = "RECHAZADO"
-            simbolo = "✗"
+            simbolo = "[X]"
         else:
-            resultado = "NO TERMINÓ (posible bucle infinito)"
-            simbolo = "∞"
+            resultado = "NO TERMINO (posible bucle infinito)"
+            simbolo = "[LOOP]"
         
         # Mostrar resumen
         print(f"Configuraciones escritas en: {args.out}")

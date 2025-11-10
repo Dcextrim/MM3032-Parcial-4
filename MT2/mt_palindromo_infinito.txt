@@ -1,0 +1,43 @@
+# Máquina de Turing: Verificador de palíndromos (BUCLE INFINITO)
+# Entrada: w ∈ {a,b}*
+# Para la entrada "aaa" entra en bucle infinito
+# Acepta si w = w^R (w es igual a w invertida)
+
+Q = {q0, q_a, q_b, q_ret_a, q_ret_b, q_check, qacc, qrej}
+Sigma = {a, b}
+Gamma = {a, b, X, ⊔}
+blank = ⊔
+q0 = q0
+qaccept = qacc
+qreject = qrej
+
+delta:
+(q0, ⊔) -> (qacc, ⊔, R)
+(q0, X) -> (q_check, X, R)
+(q0, a) -> (q_a, X, R)
+(q0, b) -> (q_b, X, R)
+
+(q_a, a) -> (q_a, a, R)
+(q_a, b) -> (q_a, b, R)
+(q_a, X) -> (q_a, X, R)
+(q_a, ⊔) -> (q_ret_a, ⊔, L)
+
+(q_b, a) -> (q_b, a, R)
+(q_b, b) -> (q_b, b, R)
+(q_b, X) -> (q_b, X, R)
+(q_b, ⊔) -> (q_ret_b, ⊔, L)
+
+(q_ret_a, a) -> (q_check, X, L)
+(q_ret_a, b) -> (qrej, b, R)
+(q_ret_a, X) -> (q_ret_a, X, L)
+
+(q_ret_b, b) -> (q_check, X, L)
+(q_ret_b, a) -> (qrej, a, R)
+(q_ret_b, X) -> (q_ret_b, X, L)
+
+(q_check, a) -> (q_check, a, L)
+(q_check, b) -> (q_check, b, L)
+(q_check, X) -> (q0, X, R)
+(q_check, ⊔) -> (q_check, ⊔, L)
+
+input = aaa

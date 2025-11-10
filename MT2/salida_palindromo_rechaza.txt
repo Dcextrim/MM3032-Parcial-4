@@ -1,0 +1,6 @@
+ q0 abb
+X q_a bb
+Xb q_a b
+Xbb q_a ⊔
+Xb q_ret_a b
+Xbb qrej ⊔

@@ -1,0 +1,12 @@
+ q0 aba
+X q_a ba
+Xb q_a a
+Xba q_a ⊔
+Xb q_ret_a a
+X q_check bX
+ q_check XbX
+X q0 bX
+XX q_b X
+XXX q_b ⊔
+XX q_ret_b X
+XXX qacc ⊔

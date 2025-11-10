@@ -1,0 +1,30 @@
+# Máquina de Turing: Suma en unario
+# Entrada: 1^n#1^m (n unos, símbolo #, m unos)
+# Salida: 1^(n+m) (n+m unos)
+# Ejemplo: 111#11 → 11111 (3+2=5)
+# Estrategia: Borra el #, luego por cada 1 de la derecha
+#             borra uno de la izquierda y lo mueve a la derecha
+
+Q = {q0, q_buscar, q_borrar, q_regresar, qacc, qrej}
+Sigma = {1, #}
+Gamma = {1, #, ⊔}
+blank = ⊔
+q0 = q0
+qaccept = qacc
+qreject = qrej
+
+delta:
+(q0, 1) -> (q0, 1, R)
+(q0, #) -> (q_buscar, ⊔, R)
+(q0, ⊔) -> (qacc, ⊔, R)
+
+(q_buscar, 1) -> (q_buscar, 1, R)
+(q_buscar, ⊔) -> (q_borrar, 1, L)
+
+(q_borrar, 1) -> (q_borrar, 1, L)
+(q_borrar, ⊔) -> (q_regresar, ⊔, R)
+
+(q_regresar, 1) -> (q0, ⊔, R)
+(q_regresar, ⊔) -> (qacc, ⊔, R)
+
+input = 111#11

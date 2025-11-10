@@ -1,0 +1,33 @@
+digraph MT {
+  rankdir=LR;
+  node [shape = circle, fontname="Helvetica"];
+
+  q0 [label="q0"];
+  q_a [label="q_a"];
+  q_b [label="q_b"];
+  q_check [label="q_check"];
+  q_ret_a [label="q_ret_a"];
+  q_ret_b [label="q_ret_b"];
+  qacc [shape=doublecircle, label="qacc"];
+  qrej [shape=doublecircle, label="qrej"];
+
+  start [shape=point]; start -> q0;
+
+  q0 -> q_a [label="a→X,R"];
+  q0 -> q_b [label="b→X,R"];
+  q0 -> q_check [label="X→X,R"];
+  q0 -> qacc [label="⊔→⊔,R"];
+  q_a -> q_a [label="X→X,R\na→a,R\nb→b,R"];
+  q_a -> q_ret_a [label="⊔→⊔,L"];
+  q_b -> q_b [label="X→X,R\na→a,R\nb→b,R"];
+  q_b -> q_ret_b [label="⊔→⊔,L"];
+  q_check -> q0 [label="X→X,R"];
+  q_check -> q_check [label="a→a,L\nb→b,L"];
+  q_check -> qacc [label="⊔→⊔,R"];
+  q_ret_a -> q_check [label="a→X,L"];
+  q_ret_a -> qacc [label="X→X,R"];
+  q_ret_a -> qrej [label="b→b,R"];
+  q_ret_b -> q_check [label="b→X,L"];
+  q_ret_b -> qacc [label="X→X,R"];
+  q_ret_b -> qrej [label="a→a,R"];
+}

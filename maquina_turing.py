@@ -219,8 +219,14 @@ class MaquinaTuring:
         lines.append('  node [shape = circle, fontname="Helvetica"];')
         lines.append("")
         
-        # Declarar estados
-        for state in sorted(self.Q):
+        # Determinar estados que realmente se usan
+        used_states = {self.q0}  # Siempre incluir estado inicial
+        for (q, _), (qp, _, _) in self.delta.items():
+            used_states.add(q)
+            used_states.add(qp)
+        
+        # Declarar solo estados usados
+        for state in sorted(used_states):
             if state == self.qacc or state == self.qrej:
                 lines.append(f'  {state} [shape=doublecircle, label="{state}"];')
             else:

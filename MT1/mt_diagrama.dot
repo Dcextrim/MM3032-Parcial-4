@@ -1,25 +1,19 @@
-
 digraph MT {
   rankdir=LR;
   node [shape = circle, fontname="Helvetica"];
 
   q0 [label="q0"];
   q1 [label="q1"];
-  qinf [label="qinf"];
   qacc [shape=doublecircle, label="qacc"];
+  qinf [label="qinf"];
   qrej [shape=doublecircle, label="qrej"];
 
   start [shape=point]; start -> q0;
 
+  q0 -> q1 [label="0→0,R"];
   q0 -> qacc [label="1→1,R"];
-  q0 -> q1   [label="0→0,R"];
   q0 -> qrej [label="⊔→⊔,R"];
-
   q1 -> qinf [label="0→0,R"];
-  q1 -> qrej [label="1→1,R"];
-  q1 -> qrej [label="⊔→⊔,R"];
-
-  qinf -> qinf [label="0→0,R"];
-  qinf -> qinf [label="1→1,R"];
-  qinf -> qinf [label="⊔→⊔,R"];
+  q1 -> qrej [label="1→1,R\n⊔→⊔,R"];
+  qinf -> qinf [label="0→0,R\n1→1,R\n⊔→⊔,R"];
 }

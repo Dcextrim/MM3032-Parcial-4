@@ -1,5 +1,3 @@
-
-
 # Simulador de Máquina de Turing Determinista (MM3032 - Parcial 4)
 
 ## Estructura del proyecto
@@ -10,34 +8,59 @@ MM3032-Parcial-4/
 ├── parser_mt.py         # Parser de especificaciones
 ├── sim_mt.py            # Programa principal con CLI
 ├── sim_mt_pdf.py        # Wrapper de compatibilidad
+├── verificar.py         # Script de pruebas automáticas
 │
-├── MT1/                 # Máquina de Turing #1
+├── MT1/                 # Máquinas de Turing simples
 │   ├── mt_acepta.txt    # Caso que acepta (input = 1)
 │   ├── mt_rechaza.txt   # Caso que rechaza (input = 01)
 │   ├── mt_infinito.txt  # Caso infinito (input = 00)
-│   └── mt_diagrama.dot  # Diagrama de estados
+│   ├── mt_diagrama.dot  # Diagrama de estados
+│   ├── salida_acepta.txt
+│   ├── salida_rechaza.txt
+│   └── salida_infinito.txt
+│
+├── MT2/                 # Máquinas de Turing complejas
+│   ├── mt_suma.txt              # Suma en unario (111#11 → 11111)
+│   ├── mt_palindromo.txt        # Verificador de palíndromos (acepta)
+│   ├── mt_palindromo_rechaza.txt # Verificador de palíndromos (rechaza)
+│   ├── mt_mult2.txt             # Multiplicación por 2 en binario
+│   ├── mt_suma.dot
+│   ├── mt_palindromo.dot
+│   ├── mt_palindromo_rechaza.dot
+│   ├── mt_mult2.dot
+│   ├── salida_suma.txt
+│   ├── salida_palindromo_acepta.txt
+│   ├── salida_palindromo_rechaza.txt
+│   ├── salida_mult2.txt
+│   └── README.md        # Documentación específica de MT2
 │
 └── README.md            # Este archivo
 ```
 
-**CÓDIGO FUENTE (4 archivos):**
+## Contenido del proyecto
+
+**CÓDIGO FUENTE (5 archivos):**
 - `maquina_turing.py` — Clase MaquinaTuring con la lógica de simulación
 - `parser_mt.py` — Parser de archivos de especificación
 - `sim_mt.py` — Programa principal con interfaz CLI
 - `sim_mt_pdf.py` — Wrapper para compatibilidad
+- `verificar.py` — Script de pruebas automáticas para MT1
 
-**ESPECIFICACIONES - MT1/ (4 archivos):**
-- `mt_acepta.txt` — Especificación + entrada que **acepta** (input = 1)
-- `mt_rechaza.txt` — Especificación + entrada que **rechaza** (input = 01)
-- `mt_infinito.txt` — Especificación + entrada que entra en **ciclo infinito** (input = 00)
-- `mt_diagrama.dot` — Diagrama de estados en formato Graphviz DOT
+**MT1/ - Máquinas Simples (3 MTs):**
+- `mt_acepta.txt` — Acepta '1'
+- `mt_rechaza.txt` — Rechaza '01'
+- `mt_infinito.txt` — Bucle infinito con '00'
+- `mt_diagrama.dot` — Diagrama de estados
 
-**SALIDAS (generadas automáticamente al ejecutar):**
-- Las salidas se generan en el mismo directorio donde ejecutes el comando
-- O puedes especificar la ruta completa con `-o`
+**MT2/ - Máquinas Complejas (4 MTs):**
+- `mt_suma.txt` — Suma en unario (111#11 → 11111)
+- `mt_palindromo.txt` — Verifica palíndromos (aba ✓)
+- `mt_palindromo_rechaza.txt` — Rechaza no-palíndromos (abb ✗)
+- `mt_mult2.txt` — Multiplica por 2 en binario (101 → 1010)
+- 4 archivos `.dot` con sus diagramas
+- Ver `MT2/README.md` para detalles
 
-**NOTA:** El código está organizado en módulos para mejor mantenibilidad.
-Las especificaciones están en carpetas (MT1/, MT2/, etc.) para probar diferentes MTs.
+**SALIDAS:** Archivos `salida_*.txt` generados automáticamente en MT1/ y MT2/
 
 ## Marco teórico
 
@@ -49,46 +72,87 @@ Este simulador implementa una Máquina de Turing determinista según la notació
 - Cinta con tope a la izquierda (índice 0); si δ indica L en posición 0, la cabeza NO se mueve
 - Por la derecha, la cinta se extiende infinitamente con blancos
 
-## Descripción de la MT implementada
+## Descripción de las MTs implementadas
 
-La máquina acepta cadenas que empiezan con '1', rechaza cadenas que empiezan con '01' o '⊔', 
+### MT1 - Máquina simple de clasificación
+Acepta cadenas que empiezan con '1', rechaza cadenas que empiezan con '01' o '⊔', 
 y entra en bucle infinito si empiezan con '00'.
 
-Estados: Q = {q0, q1, qacc, qrej, qinf}
-Alfabeto de entrada: Σ = {0, 1}
-Alfabeto de cinta: Γ = {0, 1, ⊔}
+**Estados:** Q = {q0, q1, qacc, qrej, qinf}  
+**Alfabeto de entrada:** Σ = {0, 1}  
+**Alfabeto de cinta:** Γ = {0, 1, ⊔}
 
-Transiciones:
-- (q0, 1) -> (qacc, 1, R)  [acepta si primer símbolo es 1]
-- (q0, 0) -> (q1, 0, R)    [lee 0, va a q1]
-- (q0, ⊔) -> (qrej, ⊔, R)  [rechaza cadena vacía]
-- (q1, 0) -> (qinf, 0, R)  [segundo 0: entra a bucle]
-- (q1, 1) -> (qrej, 1, R)  [segundo 1: rechaza]
-- (q1, ⊔) -> (qrej, ⊔, R)  [solo un 0: rechaza]
-- (qinf, *) -> (qinf, *, R) [bucle infinito para cualquier símbolo]
+**Transiciones:**
+- (q0, 1) → (qacc, 1, R)  — acepta si primer símbolo es 1
+- (q0, 0) → (q1, 0, R)    — lee 0, va a q1
+- (q0, ⊔) → (qrej, ⊔, R)  — rechaza cadena vacía
+- (q1, 0) → (qinf, 0, R)  — segundo 0: entra a bucle
+- (q1, 1) → (qrej, 1, R)  — segundo 1: rechaza
+- (q1, ⊔) → (qrej, ⊔, R)  — solo un 0: rechaza
+- (qinf, *) → (qinf, *, R) — bucle infinito para cualquier símbolo
+
+### MT2 - Máquinas complejas
+
+**1. Suma en unario** (`mt_suma.txt`)
+- Entrada: `1^n#1^m` → Salida: `1^(n+m)`
+- Ejemplo: `111#11` → `11111` (3 + 2 = 5)
+- Estados: 6, Transiciones: 10, Pasos: ~15
+
+**2. Verificador de palíndromos** (`mt_palindromo.txt`, `mt_palindromo_rechaza.txt`)
+- Entrada: cadenas en `{a,b}*`
+- Acepta si w = w^R (palíndromo)
+- Ejemplos: `aba` ✓, `abba` ✓, `abb` ✗
+- Estados: 8, Transiciones: 24, Pasos: ~12
+
+**3. Multiplicación por 2** (`mt_mult2.txt`)
+- Entrada: número binario
+- Salida: número × 2 (shift left + añadir 0)
+- Ejemplo: `101` → `1010` (5 × 2 = 10)
+- Estados: 6, Transiciones: 13, Pasos: ~16
+
+Ver `MT2/README.md` para detalles completos de cada máquina.
 
 ## Cómo ejecutar
 
 ### Requisitos
 - Python 3.x (sin dependencias externas)
 
-### Comandos para generar las salidas
+### Comandos básicos
 
+**MT1 - Máquinas simples:**
 ```bash
-# Caso de aceptación (input = 1) - MT1
-python sim_mt_pdf.py MT1/mt_acepta.txt -o MT1/salida_acepta.txt --conf "u q v"
+# Caso de aceptación (input = 1)
+python sim_mt_pdf.py MT1/mt_acepta.txt -o MT1/salida_acepta.txt
 
-# Caso de rechazo (input = 01) - MT1
-python sim_mt_pdf.py MT1/mt_rechaza.txt -o MT1/salida_rechaza.txt --conf "u q v"
+# Caso de rechazo (input = 01)
+python sim_mt_pdf.py MT1/mt_rechaza.txt -o MT1/salida_rechaza.txt
 
-# Caso infinito (input = 00, limitado a 200 pasos) - MT1
-python sim_mt_pdf.py MT1/mt_infinito.txt -o MT1/salida_infinito.txt --conf "u q v" --max-steps 200
+# Caso infinito (input = 00, limitado a 200 pasos)
+python sim_mt_pdf.py MT1/mt_infinito.txt -o MT1/salida_infinito.txt --max-steps 200
 ```
 
-**Para otras Máquinas de Turing:**
+**MT2 - Máquinas complejas:**
 ```bash
-# Si creas MT2/, MT3/, etc., solo cambia la ruta:
-python sim_mt_pdf.py MT2/mi_especificacion.txt -o MT2/salida.txt --conf "u q v"
+# Suma en unario: 111#11 → 11111
+python sim_mt_pdf.py MT2/mt_suma.txt -o MT2/salida_suma.txt
+
+# Verificador de palíndromos
+python sim_mt_pdf.py MT2/mt_palindromo.txt -o MT2/salida_palindromo_acepta.txt
+python sim_mt_pdf.py MT2/mt_palindromo_rechaza.txt -o MT2/salida_palindromo_rechaza.txt
+
+# Multiplicación por 2 en binario: 101 → 1010
+python sim_mt_pdf.py MT2/mt_mult2.txt -o MT2/salida_mult2.txt
+```
+
+**Generar diagramas .dot:**
+```bash
+python sim_mt_pdf.py MT1/mt_acepta.txt --dot MT1/mt_diagrama.dot -o MT1/salida.txt
+python sim_mt_pdf.py MT2/mt_suma.txt --dot MT2/mt_suma.dot -o MT2/salida.txt
+```
+
+**Verificación automática (MT1):**
+```bash
+python verificar.py
 ```
 
 ### Opciones del simulador
@@ -137,41 +201,61 @@ input = 00
 - La ejecución para al llegar a qaccept o qreject
 - Con --max-steps N, se detiene después de N pasos y muestra un aviso
 
-## Generar diagrama visual
+## Generar diagramas visuales
 
 Para generar una imagen PNG del diagrama de estados (requiere Graphviz):
 
 ```bash
-dot -Tpng mt_diagrama.dot -o mt_diagrama.png
+# MT1
+dot -Tpng MT1/mt_diagrama.dot -o MT1/mt_diagrama.png
+
+# MT2
+dot -Tpng MT2/mt_suma.dot -o MT2/mt_suma.png
+dot -Tpng MT2/mt_palindromo.dot -o MT2/mt_palindromo.png
+dot -Tpng MT2/mt_mult2.dot -o MT2/mt_mult2.png
 ```
+
+Los diagramas muestran solo los estados que realmente tienen transiciones (sin estados sueltos).
 
 ## Verificación de resultados
 
-### Caso de aceptación (mt_acepta.txt con input = 1)
-Configuraciones esperadas:
-1. ` q0 1` (inicial: cabeza en '1')
-2. `1 qacc ⊔` (acepta: escribió '1', movió derecha a blanco)
+### MT1 - Casos simples
 
+**Caso de aceptación** (mt_acepta.txt con input = 1)
+```
+ q0 1
+1 qacc ⊔
+```
 **Resultado: ACEPTADO** ✓
 
-### Caso de rechazo (mt_rechaza.txt con input = 01)
-Configuraciones esperadas:
-1. ` q0 01` (inicial)
-2. `0 q1 1` (leyó '0', fue a q1)
-3. `01 qrej ⊔` (leyó '1' en q1, rechaza)
-
+**Caso de rechazo** (mt_rechaza.txt con input = 01)
+```
+ q0 01
+0 q1 1
+01 qrej ⊔
+```
 **Resultado: RECHAZADO** ✓
 
-### Caso infinito (mt_infinito.txt con input = 00)
-Configuraciones esperadas:
-1. ` q0 00` (inicial)
-2. `0 q1 0` (leyó primer '0')
-3. `00 qinf ⊔` (leyó segundo '0', entra a bucle)
-4. `00⊔ qinf ⊔` (bucle: sigue moviendose derecha)
-5. ... (continúa indefinidamente)
-N. `# [Aviso] Se alcanzó el límite de pasos (200). Posible ciclo infinito.`
-
+**Caso infinito** (mt_infinito.txt con input = 00)
+```
+ q0 00
+0 q1 0
+00 qinf ⊔
+00⊔ qinf ⊔
+00⊔⊔ qinf ⊔
+...
+[Aviso] Se alcanzó el límite de pasos (200). Posible ciclo infinito.
+```
 **Resultado: CICLO INFINITO** ✓
+
+### MT2 - Casos complejos
+
+Ver archivos `MT2/salida_*.txt` para las trazas completas de ejecución.
+
+**Suma:** 111#11 → 11111 (15 pasos)  
+**Palíndromo acepta:** aba → ACEPTA (12 pasos)  
+**Palíndromo rechaza:** abb → RECHAZA (6 pasos)  
+**Multiplicación x2:** 101 → 1010 (16 pasos)
 
 ## Notación de configuraciones
 

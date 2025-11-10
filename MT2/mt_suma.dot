@@ -1,0 +1,22 @@
+digraph MT {
+  rankdir=LR;
+  node [shape = circle, fontname="Helvetica"];
+
+  q0 [label="q0"];
+  q_borrar [label="q_borrar"];
+  q_buscar [label="q_buscar"];
+  q_regresar [label="q_regresar"];
+  qacc [shape=doublecircle, label="qacc"];
+
+  start [shape=point]; start -> q0;
+
+  q0 -> q0 [label="1→1,R"];
+  q0 -> q_buscar [label="#→⊔,R"];
+  q0 -> qacc [label="⊔→⊔,R"];
+  q_borrar -> q_borrar [label="1→1,L"];
+  q_borrar -> q_regresar [label="⊔→⊔,R"];
+  q_buscar -> q_borrar [label="⊔→1,L"];
+  q_buscar -> q_buscar [label="1→1,R"];
+  q_regresar -> q0 [label="1→⊔,R"];
+  q_regresar -> qacc [label="⊔→⊔,R"];
+}
